@@ -9,7 +9,11 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await apiService.getUsers();
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev/api/users/`
+          : 'http://localhost:8000/api/users/';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setUsers(data);
         setLoading(false);
       } catch (err) {

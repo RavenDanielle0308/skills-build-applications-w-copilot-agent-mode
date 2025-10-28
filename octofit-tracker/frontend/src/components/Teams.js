@@ -9,7 +9,11 @@ const Teams = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const data = await apiService.getTeams();
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+          : 'http://localhost:8000/api/teams/';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setTeams(data);
         setLoading(false);
       } catch (err) {

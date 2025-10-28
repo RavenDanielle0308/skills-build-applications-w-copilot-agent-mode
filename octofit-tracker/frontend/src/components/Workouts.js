@@ -9,7 +9,11 @@ const Workouts = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const data = await apiService.getWorkouts();
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+          : 'http://localhost:8000/api/workouts/';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setWorkouts(data);
         setLoading(false);
       } catch (err) {

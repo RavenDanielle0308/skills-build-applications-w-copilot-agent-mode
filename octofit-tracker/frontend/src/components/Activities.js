@@ -9,7 +9,11 @@ const Activities = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const data = await apiService.getActivities();
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+          : 'http://localhost:8000/api/activities/';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setActivities(data);
         setLoading(false);
       } catch (err) {

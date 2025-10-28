@@ -9,7 +9,11 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const data = await apiService.getLeaderboard();
+        const apiUrl = process.env.NODE_ENV === 'production'
+          ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+          : 'http://localhost:8000/api/leaderboard/';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setLeaderboard(data);
         setLoading(false);
       } catch (err) {
