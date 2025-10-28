@@ -1,31 +1,12 @@
 import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { apiService } from './services/api';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Activities from './components/Activities';
+import Users from './components/Users';
+import Teams from './components/Teams';
+import Leaderboard from './components/Leaderboard';
+import Workouts from './components/Workouts';
 
 function App() {
-  const [activities, setActivities] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
-
-  useEffect(() => {
-    // Fetch initial data
-    const fetchData = async () => {
-      try {
-        const [activitiesData, teamsData, leaderboardData] = await Promise.all([
-          apiService.getActivities(),
-          apiService.getTeams(),
-          apiService.getLeaderboard(),
-        ]);
-        setActivities(activitiesData);
-        setTeams(teamsData);
-        setLeaderboard(leaderboardData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
 
   return (
     <Router>
@@ -47,59 +28,38 @@ function App() {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-                  <a className="nav-link" href="/dashboard">Dashboard</a>
+                  <Link className="nav-link" to="/activities">Activities</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/activities">Activities</a>
+                  <Link className="nav-link" to="/workouts">Workouts</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/teams">Teams</a>
+                  <Link className="nav-link" to="/teams">Teams</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/profile">Profile</a>
+                  <Link className="nav-link" to="/users">Users</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/leaderboard">Leaderboard</Link>
                 </li>
               </ul>
             </div>
           </div>
         </nav>
         <main className="container py-4">
-          <h1>Welcome to OctoFit Tracker</h1>
-          <p className="lead">Track your fitness journey with our comprehensive fitness tracking platform.</p>
-          
-          <div className="row mt-4">
-            <div className="col-md-4">
-              <h2>Activities</h2>
-              <ul className="list-group">
-                {activities.map(activity => (
-                  <li key={activity.id} className="list-group-item">
-                    {activity.name} - {activity.type}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="col-md-4">
-              <h2>Teams</h2>
-              <ul className="list-group">
-                {teams.map(team => (
-                  <li key={team.id} className="list-group-item">
-                    {team.name} - {team.members?.length || 0} members
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="col-md-4">
-              <h2>Leaderboard</h2>
-              <ul className="list-group">
-                {leaderboard.map(entry => (
-                  <li key={entry.id} className="list-group-item">
-                    {entry.user} - {entry.points} points
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div>
+                <h1>Welcome to OctoFit Tracker</h1>
+                <p className="lead">Track your fitness journey with our comprehensive fitness tracking platform.</p>
+              </div>
+            } />
+            <Route path="/activities" element={<Activities />} />
+            <Route path="/workouts" element={<Workouts />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+          </Routes>
         </main>
       </div>
     </Router>
